@@ -1,0 +1,92 @@
+{% extends 'todos/base.html' %}
+
+{% block title %}
+<title>Todo list</title>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+
+  <!-- title row -->
+  <div class="row">
+    <div class="offset-md-2 col-lg-9">
+      <div class="page-header">
+        <h1>
+          Todo List
+        </h1>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add a todo row -->
+  <div class="row">
+    <div class="offset-md-2 col-lg-9">
+
+      <form name="todoForm" method="post" action="{% url 'todos:add' %}" id="todoForm" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-row">
+          <div class="col-md-6">
+            <input type="text" class="form-control" name="title" id="title" placeholder="Add Your todo's" >
+            <!-- <input type="file" id="image" multiple accept="image/jpg,image/png,image/jpeg,image/gif"> -->
+            <input type="file" id="image" accept="image/jpg,image/png,image/jpeg">
+            
+          </div>
+          <div class="col-md-6">        
+            <button type="submit" name="add_submit" id="add_submit" class="btn btn-outline-primary">
+              Add
+            </button>
+            <button type="button" onClick="readAll()" class="btn btn-outline-primary">Offline Data</button>
+            <button type="button" onClick="Refresh()" class="btn btn-outline-primary">Refresh</button>
+            <!-- <button>Show my face</button> -->
+            <button id="get-access">Get access to camera</button>
+			      <video autoplay><canvas></canvas></video>
+            <br>
+            
+          </div>
+        </div>
+      </form>
+   
+      
+    </div>
+  </div>
+  
+
+  <script>
+    function Refresh() {
+        // window.parent.location = window.parent.location.href;
+		// window.location.reload();
+		// window.location.href = window.location.href;
+		location.reload(true);
+
+		// document.getElementById("todoForm").submit();
+    }
+</script>`
+
+
+  <!-- todo list row -->
+  <div class="row">
+    <div class="offset-md-2 col-lg-6">
+      <div class="list-group">
+        {% for todo in todo_list %}
+     
+          <div class="list-group-item">          
+            <div class="online_data">{{ todo.title }} 
+              {{todo.image}}
+            </div>            
+
+            <!-- <a href="{% url 'todos:delete' todo.id %}" title="Delete">
+              <i class="far fa-trash-alt"></i>
+            </a> -->
+
+          </div>
+          <div id="offlinedata"></div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+

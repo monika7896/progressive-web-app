@@ -1,0 +1,29 @@
+
+{
+    "short_name": "todos",
+    "name": "TodosApp",
+    "icons": [
+      {
+        "src": "/static/pwa/img/icon-512x512.png",
+        "sizes": "512x512"
+      }    
+      
+    ],
+    "start_url": "/",
+    // "start_url": "https://2471-2401-4900-1f30-6bd-556-e98f-a461-1f2e.ngrok.io/todos/",
+    "background_color": "#3367D6",
+    "display": "standalone",
+    "scope": "/",
+    "theme_color": "#3367D6",
+
+   
+
+    "description": "Application for demo dksfjldsk",
+    "screenshots": [
+      {
+        "src": "/static/pwa/img/aurss.png",
+        "media": "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
+    }
+    
+    ]
+  }

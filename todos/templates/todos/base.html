@@ -1,0 +1,164 @@
+{% load static %}
+{% load pwa %}
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <!--- Our CSS file -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script type="text/javascript" src="/static/pwa/serviceworker.js"></script>
+    <link rel="manifest" href="/static/pwa/manifest.json">    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    {% progressive_web_app_meta %}
+
+  {% block title %}
+  {% endblock %}
+  </head>
+
+ 
+  <body style="background-color:powderblue;">
+    <script type="text/javascript">
+      // Initialize the service worker
+      if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.register('/serviceworker.js', {
+
+          }).then(function (registration) {
+
+            // if ('SyncManager' in window) {
+            //  registration.sync.register('sync-todos');
+            //  console.log("sync todo")
+ 
+            // }
+        
+              // Registration was successful
+              console.log('django-pwa: ServiceWorker registration successful with scope: ', registration.scope);
+          }, function (err) {
+            
+              console.log('django-pwa: ServiceWorker registration failed: ', err);
+          });
+
+          // navigator.serviceWorker.ready.then(function(registration) {
+
+          // return registration.sync.register('sendFormData')
+          // }).then(function () {
+          //   console.log('sync event registered')
+          // }).catch(function() {
+          //   // system was unable to register for a sync,
+          //   // this could be an OS-level restriction
+          //   console.log('sync registration failed')
+          // });
+
+          // navigator.mediaDevices.getUserMedia({
+          //   video: {
+          //     minAspectRatio: 1.333,
+          //     minFrameRate: 30,
+          //     width: 1280,
+          //     heigth: 720,
+          //     // facingMode: ‘user’,
+
+          //     facingMode: {
+          // //Use the back camera
+          //       exact: 'environment'
+          //     }
+          //  }       
+
+          // });
+          // navigator.mediaDevices.getSupportedConstraints()
+
+      }
+  </script>
+        <!-- <img src= "{% static  'pwa/img/aurss.png' %}" alt="home" /> -->
+
+  
+    <script type="text/javascript" src="{% static 'pwa/idb.js' %}"></script>
+    <script type="text/javascript" src="{% static 'pwa/idbop.js' %}"></script>
+    <script type="text/javascript" src="{% static 'pwa/serviceworker.js' %}"></script>
+    <script type= "text/javascript" src="{% static 'pwa/app.js' %}"></script>
+    <script type= "text/javascript"  src="{% static 'pwa/scripts.js' %}"></script>
+    <script src="https://malsup.github.io/jquery.form.js"></script> 
+
+
+    {% block content %}    
+    {% endblock %}
+
+  </body>
+</html>
+
+{% block javascripts %}
+<script>
+  
+
+  $(document).ready(function () {
+    $("#todoForm").submit(function (event) {
+      event.preventDefault();
+
+      var title = $("#title").val();  
+      // var images = $('#images').prop("files");
+      var image =  $('#image')[0].files[0];
+      console.log("image", image);
+      console.log("1234");
+        // if (image.lenth > 0) {
+
+      console.log("title", title);
+      var url = "/todos/add/";
+
+      var formData = {
+        title: title,  
+        image : image,
+      };
+      console.log("formData", formData);
+        // formData.append("file" , $("input[id = 'file]")[0].file[0])
+        // var msg = {
+        //   'form_data': formData
+        // }
+
+        // navigator.serviceWorker.controller.postMessage(formData)  // <-This
+        //2863 line
+        // console.log(formData,"msg")
+
+      $.ajax({
+        type: "POST",
+        url: "/todos/add/",
+        processData: false,
+        contentType: false,
+        data: formData,
+        dataType: "json",
+        addcsrfmiddlewaretoken:'{{ csrf_token }}',
+        encode: true,
+        
+      })
+      .done(function (data) { 
+        console.log("sucess", data);
+      })
+      .fail(function (jqXHR, textStatus, errorThrown) { 
+        console.log("fail", formData);
+
+        savePostRequests (url, formData); 
+
+      });
+    
+      // .done(function (data) {
+      //   savePostRequests ('http://127.0.0.1:8000/todos/', data)
+      //   console.log(data, "sucess");
+      //       });
+
+    });
+  });
+
+</script>
+
+{% endblock javascripts %}
+
+
+
+
+
+
+
+
+
